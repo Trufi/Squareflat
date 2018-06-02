@@ -1,0 +1,27 @@
+{
+  "name": "elm-blink",
+  "version": "0.0.1",
+  "description": "Typescript boilerplate for new projects",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://"
+  },
+  "author": {
+    "name": "Mstislav Zhivodkov",
+    "email": "stevemyz@gmail.com",
+    "url": "https://trufi.github.io/"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "npm run dev",
+    "build": "webpack --mode=production",
+    "dev": "webpack-dev-server --mode=development"
+  },
+  "devDependencies": {
+    "elm-webpack-loader": "^4.5.0",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^2.1.5",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
