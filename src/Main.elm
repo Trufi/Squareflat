@@ -11,6 +11,7 @@ import Task
 import Dict exposing (Dict)
 import Models exposing (..)
 import Boxes exposing (updateBoxes)
+import ScoreLabels exposing (updateScoreLabels, addScoreLabel)
 
 
 type Msg
@@ -55,6 +56,7 @@ boxOnClick model id =
             Just box ->
                 model
                     |> addScore box
+                    |> addScoreLabel box
                     |> removeBox id
 
             Nothing ->
@@ -82,6 +84,7 @@ timeTick model delta =
     in
         currentModel
             |> updateBoxes
+            |> updateScoreLabels
 
 
 subscriptions : Model -> Sub Msg
@@ -96,12 +99,16 @@ view model =
             [ div [ attribute "class" "time" ] [ text ("Time: " ++ toString (round (model.time / 1000))) ]
             , div [ attribute "class" "score" ] [ text ("Score: " ++ toString model.score) ]
             ]
-        , node "div" [ attribute "class" "gamefield" ] (List.map (viewBox model.time) (Dict.values model.boxes))
+        , node "div"
+            [ attribute "class" "gamefield" ]
+            (List.map viewScoreLabel model.scoreLabels
+                ++ List.map viewBox (Dict.values model.boxes)
+            )
         ]
 
 
-viewBox : Float -> Box -> ( String, Html Msg )
-viewBox time box =
+viewBox : Box -> ( String, Html Msg )
+viewBox box =
     ( toString box.id
     , div
         [ classList
@@ -116,6 +123,23 @@ viewBox time box =
         , onClick (BoxOnClick box.id)
         ]
         [ text (toString box.score) ]
+    )
+
+
+viewScoreLabel : ScoreLabel -> ( String, Html Msg )
+viewScoreLabel scoreLabel =
+    ( toString scoreLabel.id
+    , div
+        [ classList
+            [ ( "scoreLabel", True )
+            , ( "scoreLabel-score-" ++ (toString scoreLabel.score), True )
+            ]
+        , style
+            [ ( "left", (toString scoreLabel.x) ++ "px" )
+            , ( "top", (toString scoreLabel.y) ++ "px" )
+            ]
+        ]
+        [ text ("+" ++ toString scoreLabel.score) ]
     )
 
 

@@ -20,6 +20,13 @@ type alias Box =
     , createTime : Float
     }
 
+type alias ScoreLabel =
+    { id: Int
+    , createTime: Float
+    , x: Int
+    , y: Int
+    , score: Int
+    }
 
 type alias Model =
     { time : Float
@@ -31,6 +38,7 @@ type alias Model =
     , scoreGenerator: Random.Generator Int
     , boxes : Dict Int Box
     , score : Int
+    , scoreLabels: List ScoreLabel
     }
 
 
@@ -49,6 +57,7 @@ initial =
         , scoreGenerator = Random.int 1 3
         , boxes = Dict.empty
         , score = 0
+        , scoreLabels = []
         }
 
 

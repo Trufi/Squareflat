@@ -52,6 +52,28 @@
         .box-score-3 {
             background: rgb(255, 60, 60);
         }
+        .scoreLabel {
+            --size: 8vmax;
+            --shift: -4vmax;
+
+            position: absolute;
+            width: var(--size);
+            height: var(--size);
+            transform: translate(var(--shift), var(--shift));
+            line-height: var(--size);
+            font-size: 2vmax;
+            text-align: center;
+            pointer-events: none;
+        }
+        .scoreLabel-score-1 {
+            color: rgb(101, 189, 240);
+        }
+        .scoreLabel-score-2 {
+            color: rgb(240, 238, 101);
+        }
+        .scoreLabel-score-3 {
+            color: rgb(255, 60, 60);
+        }
     </style>
 </head>
 <body>
