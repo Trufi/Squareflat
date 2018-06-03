@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
@@ -11,6 +11,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #000;
+        }
+        .info {
+            color: #fff;
+            pointer-events: none;
         }
         .gamefield {
             position: absolute;
@@ -18,15 +24,21 @@
             top: 0;
         }
         .box {
+            --size: 8vmax;
+            --shift: -4vmax;
+
             position: absolute;
-            width: 30px;
-            height: 30px;
-            transform: translate(-15px, -15px);
-            line-height: 30px;
+            width: var(--size);
+            height: var(--size);
+            transform: translate(var(--shift), var(--shift));
+            line-height: var(--size);
+            font-size: 5vmax;
             text-align: center;
+            color: #fff;
             cursor: pointer;
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            border-radius: 0.5vmax;
         }
         .box-visible {
             opacity: 1;

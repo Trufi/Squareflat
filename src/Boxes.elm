@@ -5,19 +5,9 @@ import Random
 import Dict
 
 
-boxLifeTime : number
-boxLifeTime =
-    5000
-
-
-boxHiddingStartTime : number
-boxHiddingStartTime =
-    4000
-
-
-boxInitializingTime : number
-boxInitializingTime =
-    1000
+boxHiddenTime : number
+boxHiddenTime =
+    100
 
 
 updateBoxes : Model -> Model
@@ -65,7 +55,7 @@ checkBoxesForDestroy model =
 
 boxIsAlive : Float -> Int -> Box -> Bool
 boxIsAlive time id box =
-    time - box.createTime < boxLifeTime
+    time - box.createTime < boxHiddenTime + lifetime box.score
 
 
 updateBoxStatuses : Model -> Model
@@ -76,12 +66,39 @@ updateBoxStatuses model =
 updateBoxStatus : Float -> Int -> Box -> Box
 updateBoxStatus time id box =
     let
-        lifetime =
+        currentLifetime =
             time - box.createTime
+
+        boxLifeTime =
+            lifetime box.score
+
+        boxAnimationTime =
+            animationTime boxLifeTime
     in
-        if lifetime > boxHiddingStartTime then
+        if currentLifetime > boxHiddenTime + boxLifeTime - boxAnimationTime then
             { box | status = BoxIsHiding }
-        else if lifetime > boxInitializingTime then
+        else if currentLifetime > boxHiddenTime then
             { box | status = BoxIsVisible }
         else
             { box | status = BoxIsInitializing }
+
+
+lifetime : Int -> Float
+lifetime score =
+    case score of
+        1 ->
+            5000
+
+        2 ->
+            3000
+
+        3 ->
+            1000
+
+        _ ->
+            5000
+
+
+animationTime : Float -> Float
+animationTime lifetime =
+    lifetime * 0.5

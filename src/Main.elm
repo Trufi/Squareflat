@@ -31,6 +31,7 @@ update msg model =
             ( { model
                 | size = size
                 , positionGenerator = createPositionGenerator size
+                , boxSize = boxSize size
               }
             , Cmd.none
             )
@@ -39,11 +40,35 @@ update msg model =
             ( timeTick model time, Cmd.none )
 
         BoxOnClick id ->
-            ( { model
-                | boxes = Dict.remove id model.boxes
-              }
+            ( boxOnClick model id
             , Cmd.none
             )
+
+
+boxOnClick : Model -> Int -> Model
+boxOnClick model id =
+    let
+        maybeBox =
+            Dict.get id model.boxes
+    in
+        case maybeBox of
+            Just box ->
+                model
+                    |> addScore box
+                    |> removeBox id
+
+            Nothing ->
+                model
+
+
+removeBox : Int -> Model -> Model
+removeBox id model =
+    { model | boxes = Dict.remove id model.boxes }
+
+
+addScore : Box -> Model -> Model
+addScore box model =
+    { model | score = model.score + box.score }
 
 
 timeTick : Model -> Float -> Model
@@ -67,19 +92,22 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [ attribute "class" "score" ] [ text (toString model.time) ]
+        [ div [ attribute "class" "info" ]
+            [ div [ attribute "class" "time" ] [ text ("Time: " ++ toString (round (model.time / 1000))) ]
+            , div [ attribute "class" "score" ] [ text ("Score: " ++ toString model.score) ]
+            ]
         , node "div" [ attribute "class" "gamefield" ] (List.map (viewBox model.time) (Dict.values model.boxes))
         ]
 
 
-viewBox : Float -> Box -> (String, Html Msg)
+viewBox : Float -> Box -> ( String, Html Msg )
 viewBox time box =
     ( toString box.id
     , div
         [ classList
             [ ( "box", True )
             , ( "box-visible", box.status == BoxIsVisible )
-            , ( "box-score-" ++ (toString box.score), True)
+            , ( "box-score-" ++ (toString box.score), True )
             ]
         , style
             [ ( "left", (toString box.x) ++ "px" )
