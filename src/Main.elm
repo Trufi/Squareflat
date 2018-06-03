@@ -1,14 +1,24 @@
 module Main exposing (..)
 
 import Html exposing (Html, div, text, program)
-import Html.Attributes exposing (attribute, style)
+import Html.Attributes exposing (attribute, style, classList)
 import Html.Events exposing (onClick)
+import Html.Keyed exposing (node)
 import Time exposing (Time)
 import Window exposing (Size)
 import AnimationFrame
 import Task
 import Random
 import Dict exposing (Dict)
+
+
+boxesAppearanceDelay : number
+boxesAppearanceDelay =
+    1000
+
+boxLifeTime : number
+boxLifeTime =
+    5000
 
 
 type Msg
@@ -23,7 +33,7 @@ type alias Box =
     , y : Int
     , score : Int
     , createTime : Float
-    , lifeTime: Float
+    , lifeTime : Float
     }
 
 
@@ -95,6 +105,7 @@ timeTick model delta =
     in
         currentModel
             |> maybeSpawn
+            |> checkBoxesForDestroy
 
 
 maybeSpawn : Model -> Model
@@ -111,6 +122,14 @@ maybeSpawn model =
             }
     else
         model
+
+checkBoxesForDestroy : Model -> Model
+checkBoxesForDestroy model =
+    { model | boxes = Dict.filter (boxIsAlive model.time) model.boxes }
+
+boxIsAlive : Float -> Int -> Box -> Bool
+boxIsAlive time id box =
+    time - box.createTime < boxLifeTime
 
 
 createBox : Float -> Random.Generator ( Int, Int ) -> Random.Seed -> ( Box, Random.Seed )
@@ -133,21 +152,26 @@ view : Model -> Html Msg
 view model =
     div []
         [ div [ attribute "class" "score" ] [ text (toString model.time) ]
-        , div [ attribute "class" "gamefield" ] (List.map box (Dict.values model.boxes))
+        , node "div" [ attribute "class" "gamefield" ] (List.map (viewBox model.time) (Dict.values model.boxes))
         ]
 
 
-box : Box -> Html Msg
-box b =
-    div
-        [ attribute "class" "box"
-        , style
-            [ ( "left", (toString b.x) ++ "px" )
-            , ( "top", (toString b.y) ++ "px" )
+viewBox : Float -> Box -> (String, Html Msg)
+viewBox time box =
+    ( toString box.id
+    , div
+        [ classList
+            [ ( "box", True )
+            , ( "box-visible", time - box.createTime > boxesAppearanceDelay )
             ]
-        , onClick (BoxOnClick b.id)
+        , style
+            [ ( "left", (toString box.x) ++ "px" )
+            , ( "top", (toString box.y) ++ "px" )
+            ]
+        , onClick (BoxOnClick box.id)
         ]
-        [ text (toString b.score) ]
+        [ text (toString box.score) ]
+    )
 
 
 main : Program Never Model Msg
