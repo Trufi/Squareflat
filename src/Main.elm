@@ -90,7 +90,10 @@ timeTick model delta =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    AnimationFrame.diffs Tick
+    Sub.batch
+        [ AnimationFrame.diffs Tick
+        , Window.resizes Resize
+        ]
 
 
 view : Model -> Html Msg
