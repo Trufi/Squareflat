@@ -19,6 +19,7 @@ type Msg
     = Tick Time
     | Resize Size
     | BoxOnClick Int
+    | ResetGame
 
 
 init : ( Model, Cmd Msg )
@@ -45,6 +46,9 @@ update msg model =
             ( boxOnClick model id
             , Cmd.none
             )
+
+        ResetGame ->
+            init
 
 
 boxOnClick : Model -> Int -> Model
@@ -76,6 +80,14 @@ addScore box model =
 
 timeTick : Model -> Float -> Model
 timeTick model delta =
+    if model.boxesLeft /= 0 then
+        updateGame model delta
+    else
+        model
+
+
+updateGame : Model -> Float -> Model
+updateGame model delta =
     let
         now =
             model.time + delta
@@ -102,7 +114,9 @@ view model =
         [ div [ attribute "class" "info" ]
             [ div [ attribute "class" "time" ] [ text ("Time: " ++ toString (round (model.time / 1000))) ]
             , div [ attribute "class" "score" ] [ text ("Score: " ++ toString model.score) ]
+            , div [ attribute "class" "boxesLeft" ] [ text ("Boxes left: " ++ toString model.boxesLeft) ]
             ]
+        , viewGameOver model
         , node "div"
             [ attribute "class" "gamefield" ]
             (List.map viewScoreLabel model.scoreLabels
@@ -146,6 +160,21 @@ viewScoreLabel scoreLabel =
         ]
         [ text ("+" ++ toString scoreLabel.score) ]
     )
+
+
+viewGameOver : Model -> Html Msg
+viewGameOver model =
+    if model.boxesLeft == 0 then
+        div
+            [ attribute "class" "gameover" ]
+            [ text "Game Over!"
+            , div
+                [ attribute "class" "gameover-again"
+                , onClick ResetGame
+                ] [ text "Again" ]
+            ]
+    else
+        Html.text ""
 
 
 onTouch : Msg -> Html.Attribute Msg

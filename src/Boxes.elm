@@ -50,8 +50,13 @@ maybeSpawn model =
 
 checkBoxesForDestroy : Model -> Model
 checkBoxesForDestroy model =
-    { model | boxes = Dict.filter (boxIsAlive model.time) model.boxes }
-
+    let
+        boxes = Dict.filter (boxIsAlive model.time) model.boxes
+    in
+        { model
+        | boxes = boxes
+        , boxesLeft = max 0 (model.boxesLeft - ((Dict.size model.boxes) - (Dict.size boxes)))
+        }
 
 boxIsAlive : Float -> Int -> Box -> Bool
 boxIsAlive time id box =

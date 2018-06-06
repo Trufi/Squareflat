@@ -13,11 +13,13 @@ addScoreLabel box model =
             | scoreLabels = scoreLabel :: model.scoreLabels
         }
 
+
 updateScoreLabels : Model -> Model
 updateScoreLabels model =
     { model
-    | scoreLabels = List.filter (scoreIsAlive model.time) model.scoreLabels
+        | scoreLabels = List.filter (scoreIsAlive model.time) model.scoreLabels
     }
+
 
 scoreIsAlive : Float -> ScoreLabel -> Bool
 scoreIsAlive time scoreLabel =

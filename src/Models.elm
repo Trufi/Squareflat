@@ -13,32 +13,35 @@ type BoxStatus
 
 type alias Box =
     { id : Int
-    , status: BoxStatus
+    , status : BoxStatus
     , x : Int
     , y : Int
     , score : Int
     , createTime : Float
     }
 
+
 type alias ScoreLabel =
-    { id: Int
-    , createTime: Float
-    , x: Int
-    , y: Int
-    , score: Int
+    { id : Int
+    , createTime : Float
+    , x : Int
+    , y : Int
+    , score : Int
     }
+
 
 type alias Model =
     { time : Float
     , lastBoxSpawnTime : Float
     , seed : Random.Seed
     , size : Size
-    , boxSize: Int
+    , boxSize : Int
     , positionGenerator : Random.Generator ( Int, Int )
-    , scoreGenerator: Random.Generator Int
+    , scoreGenerator : Random.Generator Int
     , boxes : Dict Int Box
     , score : Int
-    , scoreLabels: List ScoreLabel
+    , scoreLabels : List ScoreLabel
+    , boxesLeft : Int
     }
 
 
@@ -58,12 +61,14 @@ initial =
         , boxes = Dict.empty
         , score = 0
         , scoreLabels = []
+        , boxesLeft = 15
         }
 
 
 createPositionGenerator : Size -> Random.Generator ( Int, Int )
 createPositionGenerator size =
     Random.pair (Random.int 0 size.width) (Random.int 0 size.height)
+
 
 boxSize : Size -> Int
 boxSize size =
