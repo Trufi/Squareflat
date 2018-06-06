@@ -2,8 +2,9 @@ module Main exposing (..)
 
 import Html exposing (Html, div, text, program)
 import Html.Attributes exposing (attribute, style, classList)
-import Html.Events exposing (onClick)
+import Html.Events exposing (on, onClick)
 import Html.Keyed exposing (node)
+import Json.Decode
 import Time exposing (Time)
 import Window exposing (Size)
 import AnimationFrame
@@ -121,6 +122,7 @@ viewBox box =
             , ( "top", (toString box.y) ++ "px" )
             ]
         , onClick (BoxOnClick box.id)
+        , onTouch (BoxOnClick box.id)
         ]
         [ text (toString box.score) ]
     )
@@ -141,6 +143,11 @@ viewScoreLabel scoreLabel =
         ]
         [ text ("+" ++ toString scoreLabel.score) ]
     )
+
+
+onTouch : Msg -> Html.Attribute Msg
+onTouch msg =
+    on "touchstart" (Json.Decode.succeed msg)
 
 
 main : Program Never Model Msg
