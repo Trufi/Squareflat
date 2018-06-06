@@ -9,6 +9,7 @@ import Time exposing (Time)
 import Window exposing (Size)
 import AnimationFrame
 import Task
+import Random
 import Dict exposing (Dict)
 import Models exposing (..)
 import Boxes exposing (updateBoxes)
@@ -20,11 +21,17 @@ type Msg
     | Resize Size
     | BoxOnClick Int
     | ResetGame
+    | RandomSeed Int
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( initial, Task.perform Resize Window.size )
+    ( initial
+    , Cmd.batch
+        [ Task.perform Resize Window.size
+        , Random.generate RandomSeed (Random.int 0 100)
+        ]
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -35,6 +42,13 @@ update msg model =
                 | size = size
                 , positionGenerator = createPositionGenerator size
                 , boxSize = boxSize size
+              }
+            , Cmd.none
+            )
+
+        RandomSeed seed ->
+            ( { model
+                | seed = Random.initialSeed seed
               }
             , Cmd.none
             )
@@ -171,7 +185,8 @@ viewGameOver model =
             , div
                 [ attribute "class" "gameover-again"
                 , onClick ResetGame
-                ] [ text "Again" ]
+                ]
+                [ text "Again" ]
             ]
     else
         Html.text ""
