@@ -1,9 +1,32 @@
 language: node_js
 sudo: false
 node_js: '10'
+cache:
+  directories:
+    - elm-stuff/build-artifacts
+    - sysconfcpus
+
+before_install:
+  - | # epic build time improvement - see https://github.com/elm-lang/elm-compiler/issues/1473#issuecomment-245704142
+    if [ ! -d sysconfcpus/bin ];
+    then
+      git clone https://github.com/obmarg/libsysconfcpus.git;
+      cd libsysconfcpus;
+      ./configure --prefix=$TRAVIS_BUILD_DIR/sysconfcpus;
+      make && make install;
+      cd ..;
+    fi
+
+install:
+  - npm ci
+  - mv node_modules/.bin/elm-make node_modules/.bin/elm-make-old
+  - printf "#\041/bin/bash\n\necho \"Running elm-make with sysconfcpus -n 2\"\n\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 $TRAVIS_BUILD_DIR/node_modules/.bin/elm-make-old \"\$@\"" > node_modules/.bin/elm-make
+  - chmod +x node_modules/.bin/elm-make
+
+script:
+  - npm run build
 
 before_deploy:
-  - npm run build
   - mkdir public
   - mv index.html dist public
 
