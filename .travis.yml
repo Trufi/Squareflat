@@ -4,11 +4,13 @@ node_js: '10'
 
 before_deploy:
   - npm run build
-  - echo -e 'node_modules\nelm-stuff' > .gitignore
+  - mkdir public
+  - mv index.html dist public
 
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
+  local-dir: public
   on:
     branch: master
