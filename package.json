@@ -16,6 +16,7 @@
   "license": "MIT",
   "scripts": {
     "start": "npm run dev",
+    "test": "echo \"No tests!\"",
     "build": "webpack --mode=production",
     "dev": "webpack-dev-server --mode=development"
   },

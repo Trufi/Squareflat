@@ -3,6 +3,7 @@ sudo: false
 node_js: '10'
 
 before_deploy:
+  - npm run build
   - echo -e 'node_modules\nelm-stuff' > .gitignore
 
 deploy:
