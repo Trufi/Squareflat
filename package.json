@@ -1,11 +1,12 @@
 {
-  "name": "elm-blink",
+  "name": "squareflat",
   "version": "0.0.1",
-  "description": "Typescript boilerplate for new projects",
+  "description": "The game with square and flat blocks",
+  "private": true,
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://"
+    "url": "git+https://github.com/Trufi/Squareflat.git"
   },
   "author": {
     "name": "Mstislav Zhivodkov",

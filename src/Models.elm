@@ -61,7 +61,7 @@ initial =
         , boxes = Dict.empty
         , score = 0
         , scoreLabels = []
-        , boxesLeft = 3
+        , boxesLeft = 5
         }
 
 
