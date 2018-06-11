@@ -4,35 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Jura:400:700" rel="stylesheet">
     <title>Document</title>
     <style>
-        html, body {
-            margin: 0 auto;
+        html, body, .main, .elmmain {
+            margin: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: 'Jura', Arial, sans-serif;
             background: #000;
         }
-        .info {
+        .lefttopinfo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 5px;
+            font-size: 3vw;
             color: #fff;
             pointer-events: none;
+            z-index: 5;
+        }
+        .righttopinfo {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            font-size: 3vw;
+            color: #fff;
+            pointer-events: none;
+            z-index: 5;
         }
         .gameover {
             position: absolute;
             top: 50%;
-            left: 50%;
-            width: 30vw;
-            height: 10vh;
-            margin: -5vh 0 0 -15vw;
+            width: 100%;
+            transform: translate(0, -50%);
             text-align: center;
-            font-size: 5vw;
             color: #fff;
         }
+        .gamefield-gameover {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .gameover-header {
+            font-size: 6vw;
+            color: #db1738;
+            font-weight: 700;
+            margin: 0 0 1vw;
+        }
+        .gameover-text {
+            margin: 0 0 1vw;
+            color: #fff;
+            font-size: 3vw;
+        }
+        .gameover-text-el {
+            margin: 0 0 0.5vw;
+        }
         .gameover-again {
+            display: inline-block;
+            border-radius: 0.2vmax;
+            padding: 3px 10px;
             cursor: pointer;
-            text-decoration: underline;
-            color: rgb(101, 189, 240);
+            background: #5BC0EB;
+            font-size: 3vw;
         }
         .gamefield {
             position: absolute;
@@ -47,26 +82,27 @@
             width: var(--size);
             height: var(--size);
             transform: translate(var(--shift), var(--shift));
-            line-height: var(--size);
-            font-size: 5vmax;
+            line-height: 7.5vmax;
+            font-size: 6vmax;
+            font-weight: 700;
             text-align: center;
             color: #fff;
             cursor: pointer;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            border-radius: 0.5vmax;
+            border-radius: 0.2vmax;
         }
         .box-visible {
             opacity: 1;
         }
         .box-score-1 {
-            background: rgb(101, 189, 240);
+            background: #5BC0EB;
         }
         .box-score-2 {
-            background: rgb(240, 238, 101);
+            background: #FDE74C;
         }
         .box-score-3 {
-            background: rgb(255, 60, 60);
+            background: #db1738;
         }
         .scoreLabel {
             --size: 8vmax;
@@ -80,20 +116,24 @@
             font-size: 2vmax;
             text-align: center;
             pointer-events: none;
+            font-weight: 700;
         }
         .scoreLabel-score-1 {
-            color: rgb(101, 189, 240);
+            color: #5BC0EB;
         }
         .scoreLabel-score-2 {
-            color: rgb(240, 238, 101);
+            color: #FDE74C;
         }
         .scoreLabel-score-3 {
-            color: rgb(255, 60, 60);
+            color: #db1738;
+        }
+        .scoreLabel-score-2 {
+            color: #9BC53D;
         }
     </style>
 </head>
 <body>
-    <div id="main"></div>
+    <div class="main" id="main"></div>
     <script src="./dist/index.js"></script>
 </body>
 </html>

@@ -124,18 +124,21 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [ attribute "class" "info" ]
-            [ div [ attribute "class" "time" ] [ text ("Time: " ++ toString (round (model.time / 1000))) ]
-            , div [ attribute "class" "score" ] [ text ("Score: " ++ toString model.score) ]
-            , div [ attribute "class" "boxesLeft" ] [ text ("Boxes left: " ++ toString model.boxesLeft) ]
-            ]
-        , viewGameOver model
+    div [ attribute "class" "elmmain" ]
+        [ div [ attribute "class" "lefttopinfo" ]
+            [ div [ attribute "class" "score" ] [ text ("Score: " ++ toString model.score) ] ]
+        , div [ attribute "class" "righttopinfo" ]
+            [ div [ attribute "class" "boxesLeft" ] [ text ("Boxes left: " ++ toString model.boxesLeft) ] ]
         , node "div"
-            [ attribute "class" "gamefield" ]
+            [ classList
+                [ ( "gamefield", True )
+                , ( "gamefield-gameover", model.boxesLeft == 0 )
+                ]
+            ]
             (List.map viewScoreLabel model.scoreLabels
                 ++ List.map viewBox (Dict.values model.boxes)
             )
+        , viewGameOver model
         ]
 
 
@@ -155,7 +158,7 @@ viewBox box =
         , onClick (BoxOnClick box.id)
         , onTouch (BoxOnClick box.id)
         ]
-        [ text (toString box.score) ]
+        []
     )
 
 
@@ -181,12 +184,21 @@ viewGameOver model =
     if model.boxesLeft == 0 then
         div
             [ attribute "class" "gameover" ]
-            [ text "Game Over!"
+            [ div
+                [ attribute "class" "gameover-header" ]
+                [ text "Game Over" ]
+            , div
+                [ attribute "class" "gameover-text" ]
+                [ div [ attribute "class" "gameover-text-el" ]
+                    [ text ("Score: " ++ toString model.score) ]
+                , div [ attribute "class" "gameover-text-el" ]
+                    [ text ("Time: " ++ toString (round (model.time / 1000)) ++ "s") ]
+                ]
             , div
                 [ attribute "class" "gameover-again"
                 , onClick ResetGame
                 ]
-                [ text "Again" ]
+                [ text "Restart" ]
             ]
     else
         Html.text ""
