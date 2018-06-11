@@ -1,0 +1,13 @@
+language: node_js
+sudo: false
+node_js: '10'
+
+before_deploy:
+  - echo -e 'node_modules\nelm-stuff' > .gitignore
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
